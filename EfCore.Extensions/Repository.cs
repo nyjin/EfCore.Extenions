@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -42,28 +43,29 @@ namespace EfCore.Extensions
 
         protected virtual IQueryable<TEntity> GetQueryable() => Context.Set<TEntity>().AsQueryable();
 
-        protected virtual IQueryable<TEntity> GetCompositeQuery(Expression<Func<TEntity, bool>> filter = null)
+        protected virtual IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec = null)
         {
             var q = GetQueryable();
 
-            if(filter != null)
+            if(spec != null)
             {
-                q = q.Where(filter);
+                var evaluator = new SpecificationEvaluator<TEntity>();
+                q = evaluator.GetQuery(this.GetQueryable(), spec);
             }
 
             return q;
         }
 
-        public Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter = null)
+        public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null)
         {
-            var q = GetCompositeQuery(filter);
+            var q = ApplySpecification(spec);
 
             return q.ToListAsync();
         }
 
-        public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null)
+        public Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null)
         {
-            var q = GetCompositeQuery(filter);
+            var q = ApplySpecification(spec);
 
             return q.FirstOrDefaultAsync();
         }

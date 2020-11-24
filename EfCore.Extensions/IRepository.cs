@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -11,9 +11,9 @@ namespace EfCore.Extensions
     {
         DbContext Context { get; }
 
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter = null);
+        Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null);
 
-        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null);
+        Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null);
 
         EntityEntry<TEntity> Add(TEntity item);
 

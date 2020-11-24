@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/nyjin/EfCore.Extenions</RepositoryUrl>
+    <PackageTags>EntityFramework,EFCore,Repository</PackageTags>
+    <Copyright>Copyright © 2020</Copyright>
+    <Version>0.1.0</Version>
+    <Product>EfCore.Extensions</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>jyn.EfCore.Extensions</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Specification" Version="4.1.0" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="4.1.0" />
+    <PackageReference Include="GitVersionTask" Version="5.5.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

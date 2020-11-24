@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using Microsoft.EntityFrameworkCore;
 
-namespace nyjin.EfCore.Extensions
+namespace EfCore.Extensions
 {
     public class RepositoryRegistry
     {

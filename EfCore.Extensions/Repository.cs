@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace nyjin.EfCore.Extensions
+namespace EfCore.Extensions
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

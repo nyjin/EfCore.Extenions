@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E5041FBC-220
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0448F85F-DEE3-4A7C-9A44-A079BD2CF187}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nyjin.EfCore.Extensions", "nyjin.EfCore.Extensions\nyjin.EfCore.Extensions.csproj", "{4F64F74B-C4D4-4870-9388-3BBBC3751419}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions", "EfCore.Extensions\EfCore.Extensions.csproj", "{4F64F74B-C4D4-4870-9388-3BBBC3751419}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nyjin.EfCore.Extensions.Tests", "nyjin.EfCore.Extensions.Tests\nyjin.EfCore.Extensions.Tests.csproj", "{5EB06CB2-83EB-41BB-9A4D-E33D776830EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.Tests", "EfCore.Extensions.Tests\EfCore.Extensions.Tests.csproj", "{5EB06CB2-83EB-41BB-9A4D-E33D776830EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{67B03E86-D58F-4FF2-9280-44CAA6AF3A8E}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1C91E8C3-DD6A-4191-8629-3BAE866AAA58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nyjin.EfCore.Models", "nyjin.EfCore.Models\nyjin.EfCore.Models.csproj", "{0A0FE1AF-DB8B-4472-ABCF-EF41AFD53FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Models", "EfCore.Models\EfCore.Models.csproj", "{0A0FE1AF-DB8B-4472-ABCF-EF41AFD53FFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

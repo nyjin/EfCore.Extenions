@@ -2,7 +2,7 @@ using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace nyjin.EfCore.Extensions.Tests
+namespace EfCore.Extensions.Tests
 {
     public abstract class TestWithSqlite : IDisposable
     {

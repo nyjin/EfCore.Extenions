@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nyjin.EfCore.Extensions\nyjin.EfCore.Extensions.csproj" />
-    <ProjectReference Include="..\nyjin.EfCore.Models\nyjin.EfCore.Models.csproj" />
+    <ProjectReference Include="..\EfCore.Extensions\EfCore.Extensions.csproj" />
+    <ProjectReference Include="..\EfCore.Models\EfCore.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using nyjin.EfCore.Models;
+using EfCore.Models;
 
-namespace nyjin.EfCore.Extensions.Tests
+namespace EfCore.Extensions.Tests
 {
     public class TestDbContext : DbContext
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace nyjin.EfCore.Extensions
+namespace EfCore.Extensions
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {

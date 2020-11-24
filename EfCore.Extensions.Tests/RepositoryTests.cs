@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using nyjin.EfCore.Models;
+using EfCore.Models;
 using Xunit;
 
-namespace nyjin.EfCore.Extensions.Tests
+namespace EfCore.Extensions.Tests
 {
     public class RepositoryEnum : TestWithSqlite
     {

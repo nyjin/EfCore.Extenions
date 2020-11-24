@@ -12,10 +12,11 @@ namespace EfCore.Extensions
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private bool _disposed;
+
         private readonly RepositoryRegistry _registry = new();
 
         public Repository(DbContext context)
-            => this.Context = context ?? throw new ArgumentNullException(nameof(context));
+            => Context = context ?? throw new ArgumentNullException(nameof(context));
 
         public DbContext Context { get; private set; } = default!;
 
@@ -34,8 +35,8 @@ namespace EfCore.Extensions
 
             if(disposable)
             {
-                this.Context?.Dispose();
-                this.Context = null;
+                Context?.Dispose();
+                Context = null;
             }
 
             _disposed = true;
@@ -71,10 +72,10 @@ namespace EfCore.Extensions
         }
 
         public EntityEntry<TEntity> Add(TEntity item) => item == null ?
-            throw new ArgumentNullException(nameof(item)) : this.Context.Add(item);
+            throw new ArgumentNullException(nameof(item)) : Context.Add(item);
 
         public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity item) => item == null ?
-            throw new ArgumentNullException(nameof(item)) : this.Context.AddAsync(item);
+            throw new ArgumentNullException(nameof(item)) : Context.AddAsync(item);
 
         public Task AddAsync(params TEntity[] items) => items is null
             ? throw new ArgumentNullException(nameof(items))

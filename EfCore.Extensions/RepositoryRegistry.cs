@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EfCore.Extensions
 {
-    public class RepositoryRegistry
+    public class RepositoryRegistry : IRepositoryRegistry
     {
         private readonly ConcurrentDictionary<Type, object> _cache = new();
 

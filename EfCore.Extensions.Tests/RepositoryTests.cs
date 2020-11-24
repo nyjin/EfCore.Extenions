@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -27,28 +28,6 @@ namespace EfCore.Extensions.Tests
         }
 
         [Fact]
-        public async Task GetAllAsync_FoundEntityByIdAsync()
-        {
-            using var repository = new Repository<TodoItem>(DbContext);
-            var item = new TodoItem
-            {
-                Name = "Hello"
-            };
-            var item2 = new TodoItem
-            {
-                Name = "World"
-            };
-
-            await repository.AddAsync(item, item2);
-            var changes = await repository.SaveAsync();
-            var result = await repository.GetAllAsync(x => x.Id == 1);
-
-            changes.Should().BeGreaterThan(0);
-            result.Count.Should().Be(1);
-            result.FirstOrDefault().GetType().Should().Be(typeof(TodoItem));
-        }
-
-        [Fact]
         public async Task FirstOrDefaultAsync_OnlyOneResultAsync()
         {
             using var repository = new Repository<TodoItem>(DbContext);
@@ -70,6 +49,15 @@ namespace EfCore.Extensions.Tests
         }
 
         [Fact]
+        public async Task GetAllAsync_WithWhereClauseAsync()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            var result = await repo.GetAllAsync(x => x.Where(y => y.Name == items.First().Name));
+
+            result.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void GetRepository_HasSameContext()
         {
             var repo = new Repository<TodoItem>(DbContext);
@@ -86,7 +74,7 @@ namespace EfCore.Extensions.Tests
 
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);
-            var result = await repo.FirstOrDefaultAsync(x => x.Name == "Hello2");
+            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == "Hello2"));
             result.Should().NotBeNull();
         }
 
@@ -98,8 +86,27 @@ namespace EfCore.Extensions.Tests
 
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);
-            var result = await repo.FirstOrDefaultAsync(x => x.Name == "Hello2");
+            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == "Hello2"));
             result.Should().BeNull();
+        }
+
+        private async Task<(Repository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
+        {
+            var item = new TodoItem
+            {
+                Name = "Hello"
+            };
+
+            var item2 = new TodoItem
+            {
+                Name = "World"
+            };
+
+            var repo = new Repository<TodoItem>(DbContext);
+            await repo.AddAsync(item, item2);
+            var changes = repo.Save();
+            changes.Should().BeGreaterThan(0);
+            return (repo, new [] { item, item2});
         }
 
         private async Task<(Repository<TodoItem>, TodoItem)> AddTestItemAsync()

@@ -8,5 +8,6 @@ namespace EfCore.Extensions.Tests
         public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
 
         public DbSet<TodoItem> TodoItems { get;set; }
+        public DbSet<User> Users { get; set; }
     }
 }

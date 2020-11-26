@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EfCore.Models
+namespace EfCore.Extensions.Models
 {
-    public class User
+    public class TodoItem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -11,6 +11,8 @@ namespace EfCore.Models
 
         [Required]
         [MaxLength(128)]
-        public string Name { get;set; }
+        public string Name { get; set; }
+
+        public bool IsCompleted { get; set; }
     }
 }

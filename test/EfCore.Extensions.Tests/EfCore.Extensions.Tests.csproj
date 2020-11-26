@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -26,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EfCore.Extensions\EfCore.Extensions.csproj" />
-    <ProjectReference Include="..\EfCore.Models\EfCore.Models.csproj" />
+    <ProjectReference Include="..\..\samples\EfCore.Extensions.Data\EfCore.Extensions.Data.csproj" />
+    <ProjectReference Include="..\..\samples\EfCore.Extensions.Models\EfCore.Extensions.Models.csproj" />
+    <ProjectReference Include="..\..\src\EfCore.Extensions\EfCore.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

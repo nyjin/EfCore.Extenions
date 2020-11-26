@@ -1,4 +1,5 @@
 using System;
+using EfCore.Extensions.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,12 @@ namespace EfCore.Extensions.Tests
         protected TestWithSqlite()
         {
             _connection.Open();
-            var options = new DbContextOptionsBuilder<TestDbContext>().UseSqlite(_connection).Options;
-            DbContext = new TestDbContext(options);
+            var options = new DbContextOptionsBuilder<TodoDbContext>().UseSqlite(_connection).Options;
+            DbContext = new TodoDbContext(options);
             DbContext.Database.EnsureCreated();
         }
 
-        public TestDbContext DbContext { get; }
+        public TodoDbContext DbContext { get; }
 
         public void Dispose() => DbContext?.Dispose();
     }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EfCore.Extensions.Data;
 using FluentAssertions;
 using Xunit;
 using EfCore.Extensions.Models;
@@ -9,10 +10,12 @@ namespace EfCore.Extensions.Tests
 {
     public class RepositoryEnum : TestWithSqlite
     {
+        private Repository<TodoItem> CreateRepository() => new Repository<TodoItem>(new RepositoryOptions<TodoDbContext>(DbContext));
+
         [Fact]
         public async Task GetAllAsync_IsNotEmptyAsync()
         {
-            using var repository = new Repository<TodoItem>(DbContext);
+            using var repository = CreateRepository();
             var item = new TodoItem
             {
                 Name = "Hello"
@@ -30,7 +33,7 @@ namespace EfCore.Extensions.Tests
         [Fact]
         public async Task FirstOrDefaultAsync_OnlyOneResultAsync()
         {
-            using var repository = new Repository<TodoItem>(DbContext);
+            using var repository = CreateRepository();
             var item = new TodoItem
             {
                 Name = "Hello"
@@ -60,7 +63,7 @@ namespace EfCore.Extensions.Tests
         [Fact]
         public void GetRepository_HasSameContext()
         {
-            var repo = new Repository<TodoItem>(DbContext);
+            var repo = CreateRepository();
             var repo2 = repo.GetRepository<User>();
             repo.Context.Should().BeSameAs(repo2.Context);
         }
@@ -102,7 +105,7 @@ namespace EfCore.Extensions.Tests
                 Name = "World"
             };
 
-            var repo = new Repository<TodoItem>(DbContext);
+            var repo = CreateRepository();
             await repo.AddAsync(item, item2);
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);
@@ -116,7 +119,7 @@ namespace EfCore.Extensions.Tests
                 Name = "Hello"
             };
 
-            var repo = new Repository<TodoItem>(DbContext);
+            var repo = CreateRepository();
             await repo.AddAsync(item);
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);

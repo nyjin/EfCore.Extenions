@@ -1,5 +1,4 @@
 using EfCore.Extensions.Models;
-using EfCore.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfCore.Extensions.Data

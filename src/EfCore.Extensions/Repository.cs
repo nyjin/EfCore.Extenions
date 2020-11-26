@@ -13,12 +13,15 @@ namespace EfCore.Extensions
     {
         private bool _disposed;
 
-        private readonly RepositoryRegistry _registry = new();
+        public Repository(RepositoryOptions repositoryOptions)
+        {
+            Options = repositoryOptions;
+            Context = Options.DbContext;
+        }
 
-        public Repository(DbContext context)
-            => Context = context ?? throw new ArgumentNullException(nameof(context));
+        public RepositoryOptions Options { get; }
 
-        public DbContext Context { get; private set; } = default!;
+        public DbContext Context { get;private set; }
 
         public void Dispose()
         {
@@ -26,12 +29,61 @@ namespace EfCore.Extensions
             GC.SuppressFinalize(this);
         }
 
+        public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+
+            return q.ToListAsync();
+        }
+
+        public Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+
+            return q.FirstOrDefaultAsync();
+        }
+
+        public EntityEntry<TEntity> Add(TEntity item)
+            => item == null ? throw new ArgumentNullException(nameof(item)) : Context.Add(item);
+
+        public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity item)
+            => item == null ? throw new ArgumentNullException(nameof(item)) : Context.AddAsync(item);
+
+        public Task AddAsync(params TEntity[] items) => items is null
+            ? throw new ArgumentNullException(nameof(items))
+            : Context.AddRangeAsync(items);
+
+        public EntityEntry<TEntity> Update(TEntity item)
+            => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Update(item);
+
+        public void Update(params TEntity[] items)
+        {
+            if(items == null) { throw new ArgumentNullException(nameof(items)); }
+
+            Context.UpdateRange(items);
+        }
+
+        public EntityEntry<TEntity> Remove(TEntity item)
+            => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Remove(item);
+
+        public void Remove(params TEntity[] items)
+        {
+            if(items is null) { throw new ArgumentNullException(nameof(items)); }
+
+            Context.RemoveRange(items);
+        }
+
+        public Task<int> SaveAsync() => Context.SaveChangesAsync();
+
+        public int Save() => Context.SaveChanges();
+
+        /// <inheritdoc />
+        public IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class
+            => Options.RepositoryRegistry.GetRepository<TAnotherEntity>(Options);
+
         protected virtual void Dispose(bool disposable)
         {
-            if(_disposed)
-            {
-                return;
-            }
+            if(_disposed) { return; }
 
             if(disposable)
             {
@@ -51,62 +103,10 @@ namespace EfCore.Extensions
             if(spec != null)
             {
                 var evaluator = new SpecificationEvaluator<TEntity>();
-                q = evaluator.GetQuery(this.GetQueryable(), spec);
+                q = evaluator.GetQuery(GetQueryable(), spec);
             }
 
             return q;
         }
-
-        public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null)
-        {
-            var q = ApplySpecification(spec);
-
-            return q.ToListAsync();
-        }
-
-        public Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null)
-        {
-            var q = ApplySpecification(spec);
-
-            return q.FirstOrDefaultAsync();
-        }
-
-        public EntityEntry<TEntity> Add(TEntity item) => item == null ?
-            throw new ArgumentNullException(nameof(item)) : Context.Add(item);
-
-        public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity item) => item == null ?
-            throw new ArgumentNullException(nameof(item)) : Context.AddAsync(item);
-
-        public Task AddAsync(params TEntity[] items) => items is null
-            ? throw new ArgumentNullException(nameof(items))
-            : Context.AddRangeAsync(items);
-
-        public EntityEntry<TEntity> Update(TEntity item) => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Update(item);
-
-        public void Update(params TEntity[] items)
-        {
-            if(items == null) { throw new ArgumentNullException(nameof(items)); }
-
-            Context.UpdateRange(items);
-        }
-
-        public EntityEntry<TEntity> Remove(TEntity item) => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Remove(item);
-
-        public void Remove(params TEntity[] items)
-        {
-            if(items is null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            Context.RemoveRange(items);
-        }
-
-        public Task<int> SaveAsync() => Context.SaveChangesAsync();
-
-        public int Save() => Context.SaveChanges();
-
-        /// <inheritdoc />
-        public IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class => _registry.GetRepository<TAnotherEntity>(Context);
     }
 }

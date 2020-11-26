@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Version>0.2.0</Version>
+    <PackageId>EfCore.Extensions.WebApi</PackageId>
+    <Product>n3.EfCore.Extensions.WebApi</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

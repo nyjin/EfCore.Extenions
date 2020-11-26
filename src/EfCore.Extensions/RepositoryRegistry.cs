@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using Microsoft.EntityFrameworkCore;
 
 namespace EfCore.Extensions
 {
@@ -8,12 +7,12 @@ namespace EfCore.Extensions
     {
         private readonly ConcurrentDictionary<Type, object> _cache = new();
 
-        public IRepository<TEntity> GetRepository<TEntity>(DbContext context) where TEntity : class
+        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions options) where TEntity : class
         {
-            return context is null
-                ? throw new ArgumentNullException(nameof(context))
+            return options is null
+                ? throw new ArgumentNullException(nameof(options))
                 : (IRepository<TEntity>)_cache.GetOrAdd(typeof(IRepository<TEntity>),
-                    _ => new Repository<TEntity>(context));
+                    _ => new Repository<TEntity>(options));
         }
     }
 }

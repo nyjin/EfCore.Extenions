@@ -9,7 +9,7 @@
     <Copyright>Copyright zacronan © 2020</Copyright>
     <Version>0.2.0</Version>
     <Product>EfCore.Extensions</Product>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>n3.EfCore.Extensions</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

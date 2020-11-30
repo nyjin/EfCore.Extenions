@@ -12,6 +12,7 @@ namespace EfCore.Extensions.Data
         public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
         public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItemSettings> TodoItemSettings { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,27 +48,29 @@ namespace EfCore.Extensions.Data
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            foreach(var entity in this.ChangeTracker.Entries()
-                .Where(x => x.State == EntityState.Modified)
-                .Select(x => x.Entity)
-                .OfType<TrackableEntity>())
-            {
-                entity.UpdatedAt = DateTime.Now;
-            }
-
+            SetUpdateAtWhenEntityChanged();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach(var entity in this.ChangeTracker.Entries()
-                .Where(x => x.State == EntityState.Modified)
-                .Select(x => x.Entity)
-                .OfType<TrackableEntity>())
-            {
-                entity.UpdatedAt = DateTime.Now;
-            }
+            SetUpdateAtWhenEntityChanged();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void SetUpdateAtWhenEntityChanged()
+        {
+            if(Database.IsSqlite())
+            {
+                var now = DateTime.Now;
+                foreach(var entity in this.ChangeTracker.Entries()
+                    .Where(x => x.State == EntityState.Modified)
+                    .Select(x => x.Entity)
+                    .OfType<TrackableEntity>())
+                {
+                    entity.UpdatedAt = now;
+                }
+            }
         }
     }
 }

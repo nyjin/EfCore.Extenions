@@ -12,6 +12,7 @@ trim_trailing_whitespace = true
 
 [*.csproj]
 indent_style = space
+indent_size = 2
 
 [*.cs]
 
@@ -796,3 +797,5 @@ csharp_wrap_verbatim_interpolated_strings = no_wrap
 ###############################################
 
 csharp_old_engine = false
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none

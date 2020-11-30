@@ -21,6 +21,12 @@ namespace EfCore.Extensions
 
         Task AddAsync(params TEntity[] items);
 
+        EntityEntry<TEntity> Attach(TEntity entity);
+
+        void Attach(params TEntity[] entities);
+
+        void Detach(TEntity entity);
+
         EntityEntry<TEntity> Update(TEntity item);
 
         void Update(params TEntity[] items);

@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.Models", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.Data", "samples\EfCore.Extensions.Data\EfCore.Extensions.Data.csproj", "{78A2D339-F622-42C4-BF6A-BD6B36EC274F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfCore.Extensions.WebApi", "samples\EfCore.Extensions.WebApi\EfCore.Extensions.WebApi.csproj", "{56FB8C66-6D97-411C-8F10-868AC4103975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.WebApi", "samples\EfCore.Extensions.WebApi\EfCore.Extensions.WebApi.csproj", "{56FB8C66-6D97-411C-8F10-868AC4103975}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfCore.Extensions.WebApi.Tests", "test\EfCore.Extensions.WebApi.Tests\EfCore.Extensions.WebApi.Tests.csproj", "{83F792B9-5456-47BA-9447-CF0C036E971A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,18 @@ Global
 		{56FB8C66-6D97-411C-8F10-868AC4103975}.Release|x64.Build.0 = Release|Any CPU
 		{56FB8C66-6D97-411C-8F10-868AC4103975}.Release|x86.ActiveCfg = Release|Any CPU
 		{56FB8C66-6D97-411C-8F10-868AC4103975}.Release|x86.Build.0 = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|x64.Build.0 = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Debug|x86.Build.0 = Debug|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|x64.ActiveCfg = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|x64.Build.0 = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|x86.ActiveCfg = Release|Any CPU
+		{83F792B9-5456-47BA-9447-CF0C036E971A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +119,7 @@ Global
 		{0A0FE1AF-DB8B-4472-ABCF-EF41AFD53FFE} = {1C91E8C3-DD6A-4191-8629-3BAE866AAA58}
 		{78A2D339-F622-42C4-BF6A-BD6B36EC274F} = {1C91E8C3-DD6A-4191-8629-3BAE866AAA58}
 		{56FB8C66-6D97-411C-8F10-868AC4103975} = {1C91E8C3-DD6A-4191-8629-3BAE866AAA58}
+		{83F792B9-5456-47BA-9447-CF0C036E971A} = {0448F85F-DEE3-4A7C-9A44-A079BD2CF187}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F2EA521-DCD7-4DF4-8501-BA759B0FAB46}

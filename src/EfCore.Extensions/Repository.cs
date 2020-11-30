@@ -53,6 +53,13 @@ namespace EfCore.Extensions
             ? throw new ArgumentNullException(nameof(items))
             : Context.AddRangeAsync(items);
 
+        public void Detach(TEntity entity)
+        {
+            if(entity == null) { throw new ArgumentNullException(nameof(entity)); }
+
+            Context.Entry(entity).State = EntityState.Detached;
+        }
+
         public EntityEntry<TEntity> Update(TEntity item)
             => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Update(item);
 
@@ -80,6 +87,20 @@ namespace EfCore.Extensions
         /// <inheritdoc />
         public IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class
             => Options.RepositoryRegistry.GetRepository<TAnotherEntity>(Options);
+
+        public EntityEntry<TEntity> Attach(TEntity entity)
+        {
+            if(entity == null) { throw new ArgumentNullException(nameof(entity)); }
+
+            return Context.Attach(entity);
+        }
+
+        public void Attach(params TEntity[] entities)
+        {
+            if(entities == null) { throw new ArgumentNullException(nameof(entities)); }
+
+            Context.AttachRange(entities);
+        }
 
         protected virtual void Dispose(bool disposable)
         {

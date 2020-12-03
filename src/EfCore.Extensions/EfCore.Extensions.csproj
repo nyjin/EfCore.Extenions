@@ -7,9 +7,9 @@
     <RepositoryUrl>https://github.com/nyjin/EfCore.Extenions</RepositoryUrl>
     <PackageTags>EntityFramework,EFCore,Repository</PackageTags>
     <Copyright>Copyright zacronan © 2020</Copyright>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Product>EfCore.Extensions</Product>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>n3.EfCore.Extensions</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

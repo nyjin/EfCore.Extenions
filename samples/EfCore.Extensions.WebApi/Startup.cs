@@ -33,7 +33,7 @@ namespace EfCore.Extensions.WebApi
                 c.UseSqlite(connectionString);
             });
 
-            services.UseRepository<TodoDbContext>();
+            services.AddRepository<TodoDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

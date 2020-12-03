@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfCore.Extensions
@@ -11,10 +12,10 @@ namespace EfCore.Extensions
 
     public class RepositoryOptions<TContext> : RepositoryOptions where TContext : DbContext
     {
-        public RepositoryOptions(TContext dbContext)
+        public RepositoryOptions(TContext dbContext, IRepositoryRegistry repositoryRegistry = null)
         {
-            DbContext = dbContext;
-            RepositoryRegistry = new RepositoryRegistry();
+            DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            RepositoryRegistry = repositoryRegistry ?? new DefaultRepositoryRegistry();
         }
     }
 }

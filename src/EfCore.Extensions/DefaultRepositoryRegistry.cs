@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace EfCore.Extensions
 {
-    public class RepositoryRegistry : IRepositoryRegistry
+    public class DefaultRepositoryRegistry : IRepositoryRegistry
     {
         private readonly ConcurrentDictionary<Type, object> _cache = new();
 

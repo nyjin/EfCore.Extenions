@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfCore.Extensions
 {
@@ -15,23 +14,23 @@ namespace EfCore.Extensions
 
         Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null);
 
-        EntityEntry<TEntity> Add(TEntity item);
+        void Add(TEntity item);
 
-        ValueTask<EntityEntry<TEntity>> AddAsync(TEntity item);
+        Task<TEntity> AddAsync(TEntity item);
 
         Task AddAsync(params TEntity[] items);
 
-        EntityEntry<TEntity> Attach(TEntity entity);
+        void Attach(TEntity entity);
 
         void Attach(params TEntity[] entities);
 
         void Detach(TEntity entity);
 
-        EntityEntry<TEntity> Update(TEntity item);
+        void Update(TEntity item);
 
         void Update(params TEntity[] items);
 
-        EntityEntry<TEntity> Remove(TEntity item);
+        void Remove(TEntity item);
 
         void Remove(params TEntity[] items);
 

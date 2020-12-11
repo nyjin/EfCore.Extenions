@@ -43,11 +43,27 @@ namespace EfCore.Extensions
             return q.FirstOrDefaultAsync();
         }
 
-        public EntityEntry<TEntity> Add(TEntity item)
-            => item == null ? throw new ArgumentNullException(nameof(item)) : Context.Add(item);
+        public void Add(TEntity item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
 
-        public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity item)
-            => item == null ? throw new ArgumentNullException(nameof(item)) : Context.AddAsync(item);
+            Context.Add(item);
+        }
+
+        public async Task<TEntity> AddAsync(TEntity item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            Context.Add(item);
+            var result = await Context.AddAsync(item);
+            return result.Entity;
+        }
 
         public Task AddAsync(params TEntity[] items) => items is null
             ? throw new ArgumentNullException(nameof(items))
@@ -60,8 +76,15 @@ namespace EfCore.Extensions
             Context.Entry(entity).State = EntityState.Detached;
         }
 
-        public EntityEntry<TEntity> Update(TEntity item)
-            => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Update(item);
+        public void Update(TEntity item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            Context.Update(item);
+        }
 
         public void Update(params TEntity[] items)
         {
@@ -70,8 +93,15 @@ namespace EfCore.Extensions
             Context.UpdateRange(items);
         }
 
-        public EntityEntry<TEntity> Remove(TEntity item)
-            => item is null ? throw new ArgumentNullException(nameof(item)) : Context.Remove(item);
+        public void Remove(TEntity item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            Context.Remove(item);
+        }
 
         public void Remove(params TEntity[] items)
         {
@@ -88,11 +118,14 @@ namespace EfCore.Extensions
         public IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class
             => Options.RepositoryRegistry.GetRepository<TAnotherEntity>(Options);
 
-        public EntityEntry<TEntity> Attach(TEntity entity)
+        public void Attach(TEntity entity)
         {
-            if(entity == null) { throw new ArgumentNullException(nameof(entity)); }
+            if(entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
 
-            return Context.Attach(entity);
+            Context.Attach(entity);
         }
 
         public void Attach(params TEntity[] entities)

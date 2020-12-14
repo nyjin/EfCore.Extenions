@@ -6,9 +6,11 @@ namespace EfCore.Extensions
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public ServiceRepositoryRegistry(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        public ServiceRepositoryRegistry(IServiceProvider serviceProvider) => _serviceProvider =
+            serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
-        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions repositoryOptions) where TEntity : class
+        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions repositoryOptions)
+            where TEntity : class
             => (IRepository<TEntity>)_serviceProvider.GetService(typeof(IRepository<TEntity>));
     }
 }

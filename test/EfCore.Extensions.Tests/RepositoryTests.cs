@@ -10,7 +10,7 @@ namespace EfCore.Extensions.Tests
 {
     public class RepositoryEnum : TestWithSqlite
     {
-        private Repository<TodoItem> CreateRepository() => new Repository<TodoItem>(new RepositoryOptions<TodoDbContext>(DbContext));
+        private IRepository<TodoItem> CreateRepository() => new Repository<TodoItem>(new RepositoryOptions<TodoDbContext>(DbContext));
 
         [Fact]
         public async Task GetAllAsync_IsNotEmptyAsync()
@@ -93,7 +93,7 @@ namespace EfCore.Extensions.Tests
             result.Should().BeNull();
         }
 
-        private async Task<(Repository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
+        private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
         {
             var item = new TodoItem
             {
@@ -112,7 +112,7 @@ namespace EfCore.Extensions.Tests
             return (repo, new [] { item, item2});
         }
 
-        private async Task<(Repository<TodoItem>, TodoItem)> AddTestItemAsync()
+        private async Task<(IRepository<TodoItem>, TodoItem)> AddTestItemAsync()
         {
             var item = new TodoItem
             {

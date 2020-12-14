@@ -7,7 +7,8 @@ namespace EfCore.Extensions
     {
         private readonly ConcurrentDictionary<Type, object> _cache = new();
 
-        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions options) where TEntity : class
+        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions options)
+            where TEntity : class
         {
             return options is null
                 ? throw new ArgumentNullException(nameof(options))

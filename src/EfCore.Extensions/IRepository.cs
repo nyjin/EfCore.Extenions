@@ -8,6 +8,8 @@ namespace EfCore.Extensions
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {
+        IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class;
+
         DbContext Context { get; }
 
         Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null);
@@ -38,6 +40,6 @@ namespace EfCore.Extensions
 
         int Save();
 
-        IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class;
+        bool IsUpdated(TEntity entity);
     }
 }

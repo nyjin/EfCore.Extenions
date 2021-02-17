@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 
@@ -21,6 +22,24 @@ namespace EfCore.Extensions
             specBuilder(spec.GetQuery());
 
             return repository.FirstOrDefaultAsync(spec);
+        }
+
+        public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
+            where TEntity : class
+        {
+            if(repository.IsUpdated(entity))
+            {
+                repository.Update(entity);
+            }
+        }
+
+        public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, params TEntity[] entities)
+            where TEntity : class
+        {
+            foreach(var entity in entities.Where(repository.IsUpdated))
+            {
+                repository.Update(entity);
+            }
         }
     }
 }

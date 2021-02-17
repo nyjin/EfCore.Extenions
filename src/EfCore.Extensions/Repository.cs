@@ -114,6 +114,8 @@ namespace EfCore.Extensions
 
         public int Save() => Context.SaveChanges();
 
+        public bool IsUpdated(TEntity entity) => Context.ChangeTracker.Entries<TEntity>().Any(x => x.Entity == entity && x.State == EntityState.Modified);
+
         /// <inheritdoc />
         public IRepository<TAnotherEntity> GetRepository<TAnotherEntity>() where TAnotherEntity : class
             => Options.RepositoryRegistry.GetRepository<TAnotherEntity>(Options);

@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
+		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1C91E8C3-DD6A-4191-8629-3BAE866AAA58}"
@@ -25,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.Data", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.WebApi", "samples\EfCore.Extensions.WebApi\EfCore.Extensions.WebApi.csproj", "{56FB8C66-6D97-411C-8F10-868AC4103975}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfCore.Extensions.WebApi.Tests", "test\EfCore.Extensions.WebApi.Tests\EfCore.Extensions.WebApi.Tests.csproj", "{83F792B9-5456-47BA-9447-CF0C036E971A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfCore.Extensions.WebApi.Tests", "test\EfCore.Extensions.WebApi.Tests\EfCore.Extensions.WebApi.Tests.csproj", "{83F792B9-5456-47BA-9447-CF0C036E971A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

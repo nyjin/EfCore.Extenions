@@ -101,6 +101,24 @@ namespace EfCore.Extensions.Tests
             repo.IsUpdated(item).Should().BeTrue();
         }
 
+        [Fact]
+        public async Task AnyAsync_HasEntity_ReturnTrue()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = await repo.AnyAsync(x => x.Where(y => y.Name == item.Name));
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task AnyAsync_NoEntity_ReturnFalse()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = await repo.AnyAsync(x => x.Where(y => y.Name == "A"));
+            result.Should().BeFalse();
+        }
+
         private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
         {
             var item = new TodoItem

@@ -43,6 +43,13 @@ namespace EfCore.Extensions
             return q.FirstOrDefaultAsync();
         }
 
+        public Task<bool> AnyAsync(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+
+            return q.AnyAsync();
+        }
+
         public void Add(TEntity item)
         {
             if(item == null)

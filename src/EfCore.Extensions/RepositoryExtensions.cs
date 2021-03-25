@@ -24,6 +24,14 @@ namespace EfCore.Extensions
             return repository.FirstOrDefaultAsync(spec);
         }
 
+        public static Task<bool> AnyAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
+        {
+            var spec = new RelaySpecification<TEntity>();
+            specBuilder(spec.GetQuery());
+
+            return repository.AnyAsync(spec);
+        }
+
         public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
             where TEntity : class
         {

@@ -16,6 +16,8 @@ namespace EfCore.Extensions
 
         Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null);
 
+        Task<bool> AnyAsync(ISpecification<TEntity> spec = null);
+
         void Add(TEntity item);
 
         Task<TEntity> AddAsync(TEntity item);

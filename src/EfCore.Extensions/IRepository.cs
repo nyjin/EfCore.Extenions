@@ -12,36 +12,27 @@ namespace EfCore.Extensions
 
         DbContext Context { get; }
 
+        List<TEntity> GetAll(ISpecification<TEntity> spec = null);
         Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null);
-
+        TEntity FirstOrDefault(ISpecification<TEntity> spec = null);
         Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null);
-
         Task<bool> AnyAsync(ISpecification<TEntity> spec = null);
-
+        bool Any(ISpecification<TEntity> spec = null);
         void Add(TEntity item);
-
+        void Add(params TEntity[] items);
+        void Add(IEnumerable<TEntity> items);
         Task<TEntity> AddAsync(TEntity item);
-
         Task AddAsync(params TEntity[] items);
-
+        Task AddAsync(IEnumerable<TEntity> items);
         void Attach(TEntity entity);
-
         void Attach(params TEntity[] entities);
-
         void Detach(TEntity entity);
-
         void Update(TEntity item);
-
         void Update(params TEntity[] items);
-
         void Remove(TEntity item);
-
         void Remove(params TEntity[] items);
-
-        Task<int> SaveAsync();
-
         int Save();
-
+        Task<int> SaveAsync();
         bool IsUpdated(TEntity entity);
     }
 }

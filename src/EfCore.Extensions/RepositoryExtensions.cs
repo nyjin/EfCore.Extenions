@@ -8,6 +8,14 @@ namespace EfCore.Extensions
 {
     public static class RepositoryExtensions
     {
+        public static List<TEntity> GetAll<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
+        {
+            var spec = new RelaySpecification<TEntity>();
+            specBuilder(spec.GetQuery());
+
+            return repository.GetAll(spec);
+        }
+
         public static Task<List<TEntity>> GetAllAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
         {
             var spec = new RelaySpecification<TEntity>();
@@ -24,6 +32,14 @@ namespace EfCore.Extensions
             return repository.FirstOrDefaultAsync(spec);
         }
 
+        public static TEntity FirstOrDefault<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
+        {
+            var spec = new RelaySpecification<TEntity>();
+            specBuilder(spec.GetQuery());
+
+            return repository.FirstOrDefault(spec);
+        }
+
         public static Task<bool> AnyAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
         {
             var spec = new RelaySpecification<TEntity>();
@@ -31,6 +47,16 @@ namespace EfCore.Extensions
 
             return repository.AnyAsync(spec);
         }
+
+        public static bool Any<TEntity>(this IRepository<TEntity> repository,
+                                        Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
+        {
+            var spec = new RelaySpecification<TEntity>();
+            specBuilder(spec.GetQuery());
+
+            return repository.Any(spec);
+        }
+
 
         public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
             where TEntity : class

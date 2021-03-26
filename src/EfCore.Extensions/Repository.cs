@@ -29,25 +29,40 @@ namespace EfCore.Extensions
             GC.SuppressFinalize(this);
         }
 
+        public List<TEntity> GetAll(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+            return q.ToList();
+        }
+
         public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec = null)
         {
             var q = ApplySpecification(spec);
-
             return q.ToListAsync();
+        }
+
+        public TEntity FirstOrDefault(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+            return q.FirstOrDefault();
         }
 
         public Task<TEntity> FirstOrDefaultAsync(ISpecification<TEntity> spec = null)
         {
             var q = ApplySpecification(spec);
-
             return q.FirstOrDefaultAsync();
         }
 
         public Task<bool> AnyAsync(ISpecification<TEntity> spec = null)
         {
             var q = ApplySpecification(spec);
-
             return q.AnyAsync();
+        }
+
+        public bool Any(ISpecification<TEntity> spec = null)
+        {
+            var q = ApplySpecification(spec);
+            return q.Any();
         }
 
         public void Add(TEntity item)
@@ -58,6 +73,20 @@ namespace EfCore.Extensions
             }
 
             Context.Add(item);
+        }
+
+        public void Add(params TEntity[] items)
+        {
+            if(items == null) { throw new ArgumentNullException(nameof(items)); }
+
+            Context.AddRange(items);
+        }
+
+        public void Add(IEnumerable<TEntity> items)
+        {
+            if(items == null) { throw new ArgumentNullException(nameof(items)); }
+
+            Context.AddRange(items);
         }
 
         public async Task<TEntity> AddAsync(TEntity item)
@@ -75,6 +104,13 @@ namespace EfCore.Extensions
         public Task AddAsync(params TEntity[] items) => items is null
             ? throw new ArgumentNullException(nameof(items))
             : Context.AddRangeAsync(items);
+
+        public Task AddAsync(IEnumerable<TEntity> items)
+        {
+            if(items == null) { throw new ArgumentNullException(nameof(items)); }
+
+            return Context.AddRangeAsync(items);
+        }
 
         public void Detach(TEntity entity)
         {

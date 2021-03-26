@@ -61,6 +61,15 @@ namespace EfCore.Extensions.Tests
         }
 
         [Fact]
+        public async Task GetAll_WithWhereClause()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            var result = repo.GetAll(x => x.Where(y => y.Name == items.First().Name));
+
+            result.Count.Should().Be(1);
+        }
+
+        [Fact]
         public void GetRepository_HasSameContext()
         {
             var repo = CreateRepository();
@@ -119,7 +128,54 @@ namespace EfCore.Extensions.Tests
             result.Should().BeFalse();
         }
 
+        [Fact]
+        public async Task Any_HasEntity_ReturnTrue()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = repo.Any(x => x.Where(y => y.Name == item.Name));
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Any_NoEntity_ReturnFalse()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = repo.Any(x => x.Where(y => y.Name == "A"));
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task FirstOrDefault_HasEntity_ValidEntity()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = repo.FirstOrDefault(x => x.Where(y => y.Name == item.Name));
+            result.Should().NotBeNull();
+            result.Should().BeOfType<TodoItem>();
+        }
+
+        [Fact]
+        public async Task FirstOrDefault_NoEntity_Null()
+        {
+            var (repo, item) = await AddTestItemAsync();
+
+            var result = repo.FirstOrDefault(x => x.Where(y => y.Name == "A"));
+            result.Should().BeNull();
+        }
+
         private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
+        {
+            var items = CreateTestTodoItems();
+            var repo = CreateRepository();
+            await repo.AddAsync(items);
+            var changes = repo.Save();
+            changes.Should().BeGreaterThan(0);
+            return (repo, items);
+        }
+
+        private static IEnumerable<TodoItem> CreateTestTodoItems()
         {
             var item = new TodoItem
             {
@@ -131,11 +187,10 @@ namespace EfCore.Extensions.Tests
                 Name = "World"
             };
 
-            var repo = CreateRepository();
-            await repo.AddAsync(item, item2);
-            var changes = repo.Save();
-            changes.Should().BeGreaterThan(0);
-            return (repo, new [] { item, item2});
+            return new List<TodoItem>
+            {
+                item,item2
+            };
         }
 
         private async Task<(IRepository<TodoItem>, TodoItem)> AddTestItemAsync()

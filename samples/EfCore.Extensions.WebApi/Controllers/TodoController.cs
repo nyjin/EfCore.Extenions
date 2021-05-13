@@ -10,14 +10,9 @@ namespace EfCore.Extensions.WebApi.Controllers
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly ILogger<TodoController> _logger;
         private readonly IRepository<TodoItem> _repository;
 
-        public TodoController(ILogger<TodoController> logger, IRepository<TodoItem> repository)
-        {
-            _logger = logger;
-            _repository = repository;
-        }
+        public TodoController(IRepository<TodoItem> repository) => _repository = repository;
 
         [HttpGet]
         public Task<List<TodoItem>> Get() => _repository.GetAllAsync();

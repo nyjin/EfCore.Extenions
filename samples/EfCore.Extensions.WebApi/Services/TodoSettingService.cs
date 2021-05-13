@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ardalis.Specification;
 using AutoMapper;
 using EfCore.Extensions.Models;
 
@@ -20,10 +21,8 @@ namespace EfCore.Extensions.WebApi.Services
 
         public async Task<int> AddOrUpdatePropsAsync(int todoItemId, TodoItemSettingDto settingDto)
         {
-            var todoItem = _mapper.Map<TodoItem>(settingDto);
             var todoSettings = _mapper.Map<IDictionary<string, object>>(settingDto);
 
-            todoItem.Id = todoItemId;
             var settings = await _todoSettingRepository.GetAllAsync(x => x.Where(y => y.TodoItemId == todoItemId));
             var right = settings.ToDictionary(x => x.SettingKey, x => new StateObject<TodoItemSettings>(x));
 
@@ -70,9 +69,6 @@ namespace EfCore.Extensions.WebApi.Services
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
-            var todoRepository = _todoSettingRepository.GetRepository<TodoItem>();
-            todoRepository.Attach(todoItem);
 
             return await _todoSettingRepository.SaveAsync();
         }

@@ -19,7 +19,6 @@ namespace EfCore.Extensions.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -28,7 +27,7 @@ namespace EfCore.Extensions.WebApi
 
             services.AddDbContext<TodoDbContext>(c =>
             {
-                var connectionString = Configuration.GetConnectionString("Pdc");
+                var connectionString = Configuration.GetConnectionString("Db");
                 connectionString = connectionString.Replace("{AppDir}", AppDomain.CurrentDomain.BaseDirectory);
                 c.UseSqlite(connectionString);
             });

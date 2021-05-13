@@ -1,21 +1,32 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EfCore.Extensions.Data;
+using Ardalis.Specification;
 using FluentAssertions;
 using Xunit;
 using EfCore.Extensions.Models;
+using Xunit.Abstractions;
 
 namespace EfCore.Extensions.Tests
 {
-    public class RepositoryEnum : TestWithSqlite
+    public class RepositoryTest : IClassFixture<SqliteFixture>
     {
-        private IRepository<TodoItem> CreateRepository() => new Repository<TodoItem>(new RepositoryOptions<TodoDbContext>(DbContext));
+        private readonly SqliteFixture _fixture;
+
+        public RepositoryTest(SqliteFixture fixture, ITestOutputHelper outputHelper)
+        {
+            _fixture = fixture;
+            _fixture.Output = outputHelper;
+        }
+
+        private IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
+            => _fixture.CreateRepository<TEntity>();
 
         [Fact]
         public async Task GetAllAsync_IsNotEmptyAsync()
         {
-            using var repository = CreateRepository();
+            var repository = CreateRepository<TodoItem>();
             var item = new TodoItem
             {
                 Name = "Hello"
@@ -33,7 +44,7 @@ namespace EfCore.Extensions.Tests
         [Fact]
         public async Task FirstOrDefaultAsync_OnlyOneResultAsync()
         {
-            using var repository = CreateRepository();
+            var repository = CreateRepository<TodoItem>();
             var item = new TodoItem
             {
                 Name = "Hello"
@@ -72,7 +83,7 @@ namespace EfCore.Extensions.Tests
         [Fact]
         public void GetRepository_HasSameContext()
         {
-            var repo = CreateRepository();
+            var repo = CreateRepository<TodoItem>();
             var repo2 = repo.GetRepository<User>();
             repo.Context.Should().BeSameAs(repo2.Context);
         }
@@ -86,19 +97,19 @@ namespace EfCore.Extensions.Tests
 
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);
-            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == "Hello2"));
+            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == item.Name));
             result.Should().NotBeNull();
         }
 
         [Fact]
         public async Task Remove_Entity_ShouldBe_ChangedAsync()
         {
-            var (repo, item) = await AddTestItemAsync();
+            var (repo, item) = await AddTestItemAsync(Guid.NewGuid().ToString());
             repo.Remove(item);
 
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);
-            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == "Hello2"));
+            var result = await repo.FirstOrDefaultAsync(x => x.Where(y => y.Name == item.Name));
             result.Should().BeNull();
         }
 
@@ -123,8 +134,9 @@ namespace EfCore.Extensions.Tests
         public async Task AnyAsync_NoEntity_ReturnFalse()
         {
             var (repo, item) = await AddTestItemAsync();
+            var name = Guid.NewGuid().ToString();
 
-            var result = await repo.AnyAsync(x => x.Where(y => y.Name == "A"));
+            var result = await repo.AnyAsync(x => x.Where(y => y.Name == name));
             result.Should().BeFalse();
         }
 
@@ -140,9 +152,9 @@ namespace EfCore.Extensions.Tests
         [Fact]
         public async Task Any_NoEntity_ReturnFalse()
         {
-            var (repo, item) = await AddTestItemAsync();
+            var (repo, item) = await AddTestItemAsync("A");
 
-            var result = repo.Any(x => x.Where(y => y.Name == "A"));
+            var result = repo.Any(x => x.Where(y => y.Name == "B"));
             result.Should().BeFalse();
         }
 
@@ -165,26 +177,28 @@ namespace EfCore.Extensions.Tests
             result.Should().BeNull();
         }
 
-        private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
+        [Fact]
+        public async Task Remove_RemoveAll_ShouldEmpty()
         {
-            var items = CreateTestTodoItems();
-            var repo = CreateRepository();
-            await repo.AddAsync(items);
-            var changes = repo.Save();
-            changes.Should().BeGreaterThan(0);
-            return (repo, items);
-        }
+            var (repo, items) = await AddTestItemsAsync();
+            repo.Remove(items);
+            var changes = await repo.SaveAsync();
+            changes.Should().Be(items.Count());
+            var result = await repo.GetAllAsync();
+            var removed = items.Select(x => x.Name);
+            var resultByFilter = result.Count(x => removed.Contains(x.Name));
+            resultByFilter.Should().Be(0);        }
 
         private static IEnumerable<TodoItem> CreateTestTodoItems()
         {
             var item = new TodoItem
             {
-                Name = "Hello"
+                Name = Guid.NewGuid().ToString()
             };
 
             var item2 = new TodoItem
             {
-                Name = "World"
+                Name = Guid.NewGuid().ToString()
             };
 
             return new List<TodoItem>
@@ -193,14 +207,24 @@ namespace EfCore.Extensions.Tests
             };
         }
 
-        private async Task<(IRepository<TodoItem>, TodoItem)> AddTestItemAsync()
+        private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
+        {
+            var items = CreateTestTodoItems();
+            var repo = CreateRepository<TodoItem>();
+            await repo.AddAsync(items);
+            var changes = repo.Save();
+            changes.Should().BeGreaterThan(0);
+            return (repo, items);
+        }
+
+        private async Task<(IRepository<TodoItem>, TodoItem)> AddTestItemAsync(string name = "Hello")
         {
             var item = new TodoItem
             {
-                Name = "Hello"
+                Name = name
             };
 
-            var repo = CreateRepository();
+            var repo = CreateRepository<TodoItem>();
             await repo.AddAsync(item);
             var changes = repo.Save();
             changes.Should().BeGreaterThan(0);

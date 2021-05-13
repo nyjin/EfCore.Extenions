@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.6" />
@@ -19,13 +20,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\samples\EfCore.Extensions.Data\EfCore.Extensions.Data.csproj" />
-    <ProjectReference Include="..\..\samples\EfCore.Extensions.WebApi\EfCore.Extensions.WebApi.csproj" />
-    <ProjectReference Include="..\..\src\EfCore.Extensions\EfCore.Extensions.csproj" />
-    <ProjectReference Include="..\EfCore.Extensions.Tests\EfCore.Extensions.Tests.csproj" />
   </ItemGroup>
 
 </Project>

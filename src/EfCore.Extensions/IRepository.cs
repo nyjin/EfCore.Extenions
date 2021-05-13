@@ -27,10 +27,12 @@ namespace EfCore.Extensions
         void Attach(TEntity entity);
         void Attach(params TEntity[] entities);
         void Detach(TEntity entity);
+        void Detach(IEnumerable<TEntity> entity);
         void Update(TEntity item);
         void Update(params TEntity[] items);
         void Remove(TEntity item);
         void Remove(params TEntity[] items);
+        void Remove(IEnumerable<TEntity> items);
         int Save();
         Task<int> SaveAsync();
         bool IsUpdated(TEntity entity);

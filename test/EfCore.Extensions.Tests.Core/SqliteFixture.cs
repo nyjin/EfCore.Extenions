@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------
+// <copyright file="SqliteFixture.cs" company="NCSOFT">
+// Copyright (c) NCSOFT. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 using System;
 using EfCore.Extensions.Data;
 using Microsoft.Data.Sqlite;
@@ -7,29 +12,32 @@ using Xunit.Abstractions;
 using Xunit.DependencyInjection;
 using Xunit.DependencyInjection.Logging;
 
-namespace EfCore.Extensions.Tests
+namespace EfCore.Extensions.Tests.Core
 {
-    public abstract class TestWithSqlite : IDisposable
+    public class SqliteFixture : IDisposable
     {
         private const string ConnectionString = "DataSource=:memory:";
         private readonly SqliteConnection _connection = new SqliteConnection(ConnectionString);
 
-        private ITestOutputHelper _output;
+        public ITestOutputHelper Output { get; }
 
-        public TestWithSqlite(ITestOutputHelper outputHelper)
+        public SqliteFixture(ITestOutputHelper outputHelper)
         {
-            _output = outputHelper;
+            Output = outputHelper;
             _connection.Open();
             var options = new DbContextOptionsBuilder<TodoDbContext>().UseSqlite(_connection).Options;
 
             var loggerFactory = new LoggerFactory();
             var accessor = new TestOutputHelperAccessor();
-            accessor.Output = _output;
+            accessor.Output = Output;
             loggerFactory.AddProvider(new XunitTestOutputLoggerProvider(accessor));
 
             DbContext = new TodoDbContext(options);
             DbContext.Database.EnsureCreated();
         }
+
+        public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class =>
+            new Repository<TEntity>(new RepositoryOptions<TodoDbContext>(DbContext));
 
         public TodoDbContext DbContext { get; }
 

@@ -4,16 +4,34 @@ using System.Threading;
 using System.Threading.Tasks;
 using EfCore.Extensions.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EfCore.Extensions.Data
 {
     public class TodoDbContext : DbContext
     {
-        public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
+        private readonly ILoggerFactory _loggerFactory;
+
+        public TodoDbContext(DbContextOptions<TodoDbContext> options, ILoggerFactory loggerFactory = null) : base(options)
+        {
+            _loggerFactory = loggerFactory;
+        }
 
         public DbSet<TodoItem> TodoItems { get; set; }
         public DbSet<TodoItemSettings> TodoItemSettings { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserTodo> UserTodos { get;set; }
+
+        /// <inheritdoc />
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if(_loggerFactory != null)
+            {
+                optionsBuilder.UseLoggerFactory(_loggerFactory).EnableSensitiveDataLogging();
+            }
+            
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +62,24 @@ namespace EfCore.Extensions.Data
                     }
                 }
             }
+
+            modelBuilder.Entity<UserTodo>()
+                .HasOne(x => x.Todo)
+                .WithMany(x => x.UserTodos)
+                .HasForeignKey(x => x.TodoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserTodo>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserTodos)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TodoItemSettings>()
+                .HasOne(x => x.TodoItem)
+                .WithMany(x => x.Settings)
+                .HasForeignKey(x => x.TodoItemId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

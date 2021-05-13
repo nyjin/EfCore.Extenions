@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using EfCore.Extensions.Data;
-using EfCore.Extensions.Models;
-using Xunit;
+using Ardalis.Specification;
 
-namespace EfCore.Extensions.Tests
+namespace EfCore.Extensions
 {
-
-   
 }

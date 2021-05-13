@@ -77,7 +77,7 @@ namespace EfCore.Extensions
 
         public void Add(params TEntity[] items)
         {
-            if(items == null) { throw new ArgumentNullException(nameof(items)); }
+            if(items == null || items.Length == 0) { throw new ArgumentNullException(nameof(items)); }
 
             Context.AddRange(items);
         }
@@ -118,6 +118,15 @@ namespace EfCore.Extensions
 
             Context.Entry(entity).State = EntityState.Detached;
         }
+        public void Detach(IEnumerable<TEntity> entities)
+        {
+            if(entities == null) { throw new ArgumentNullException(nameof(entities)); }
+
+            foreach(var entity in entities)
+            {
+                Context.Entry(entity).State = EntityState.Detached;
+            }
+        }
 
         public void Update(TEntity item)
         {
@@ -149,6 +158,13 @@ namespace EfCore.Extensions
         public void Remove(params TEntity[] items)
         {
             if(items is null) { throw new ArgumentNullException(nameof(items)); }
+
+            Context.RemoveRange(items);
+        }
+
+        public void Remove(IEnumerable<TEntity> items)
+        {
+            if(items == null) { throw new ArgumentNullException(nameof(items)); }
 
             Context.RemoveRange(items);
         }
@@ -201,8 +217,8 @@ namespace EfCore.Extensions
 
             if(spec != null)
             {
-                var evaluator = new SpecificationEvaluator<TEntity>();
-                q = evaluator.GetQuery(GetQueryable(), spec);
+                var evaluator = new SpecificationEvaluator();
+                q = evaluator.GetQuery(q, spec);
             }
 
             return q;

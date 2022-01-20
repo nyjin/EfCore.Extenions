@@ -10,7 +10,6 @@ using EfCore.Extensions.WebApi.Profiles;
 using EfCore.Extensions.WebApi.Services;
 using FluentAssertions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace EfCore.Extensions.WebApi.Tests
 {

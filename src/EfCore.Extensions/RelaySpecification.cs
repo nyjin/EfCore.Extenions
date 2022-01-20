@@ -1,9 +1,8 @@
-﻿using Ardalis.Specification;
+using Ardalis.Specification;
 
-namespace EfCore.Extensions
+namespace EfCore.Extensions;
+
+public class RelaySpecification<T> : Specification<T>
 {
-    public class RelaySpecification<T> : Specification<T>
-    {
-        public ISpecificationBuilder<T> GetQuery() => Query;
-    }
+    public ISpecificationBuilder<T> GetQuery() => Query;
 }

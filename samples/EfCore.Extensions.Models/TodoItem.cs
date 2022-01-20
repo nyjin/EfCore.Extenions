@@ -13,9 +13,9 @@ namespace EfCore.Extensions.Models
 
         public bool IsCompleted { get; set; }
 
-        public ICollection<UserTodo> UserTodos { get; set; }
+        public ICollection<UserTodo> UserTodos { get; set; } = new List<UserTodo>();
 
-        public ICollection<TodoItemSettings> Settings { get;set; }
+        public ICollection<TodoItemSettings> Settings { get;set; } = new List<TodoItemSettings>();
 
         [NotMapped]
         public ICollection<User> Users => UserTodos.Select(x => x.User).ToList();

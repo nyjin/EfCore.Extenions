@@ -1,21 +1,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace EfCore.Extensions
+namespace EfCore.Extensions;
+
+public class RepositoryOptions
 {
-    public class RepositoryOptions
-    {
-        public DbContext DbContext { get; internal set; }
+    public DbContext DbContext { get;internal set; }
 
-        public IRepositoryRegistry RepositoryRegistry { get; internal set; }
-    }
+    public IRepositoryRegistry RepositoryRegistry { get;internal set; }
+}
 
-    public class RepositoryOptions<TContext> : RepositoryOptions where TContext : DbContext
+public class RepositoryOptions<TContext> : RepositoryOptions where TContext : DbContext
+{
+    public RepositoryOptions(TContext dbContext, IRepositoryRegistry repositoryRegistry = null)
     {
-        public RepositoryOptions(TContext dbContext, IRepositoryRegistry repositoryRegistry = null)
-        {
-            DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            RepositoryRegistry = repositoryRegistry ?? new DefaultRepositoryRegistry();
-        }
+        DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        RepositoryRegistry = repositoryRegistry ?? new DefaultRepositoryRegistry();
     }
 }

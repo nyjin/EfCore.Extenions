@@ -8,9 +8,6 @@ using EfCore.Extensions.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
-using Xunit.DependencyInjection;
-using Xunit.DependencyInjection.Logging;
 
 namespace EfCore.Extensions.Tests
 {
@@ -18,19 +15,10 @@ namespace EfCore.Extensions.Tests
     {
         private const string ConnectionString = "DataSource=:memory:";
         private readonly SqliteConnection _connection = new SqliteConnection(ConnectionString);
-        private readonly TestOutputHelperAccessor _accessor;
-
-        public ITestOutputHelper Output
-        {
-            get => _accessor.Output;
-            set => _accessor.Output = value;
-        }
 
         public SqliteFixture()
         {
             var loggerFactory = new LoggerFactory();
-            _accessor = new TestOutputHelperAccessor();
-            loggerFactory.AddProvider(new XunitTestOutputLoggerProvider(_accessor));
 
             var options = new DbContextOptionsBuilder<TodoDbContext>().UseSqlite(_connection).Options;
             DbContext = new TodoDbContext(options, loggerFactory);

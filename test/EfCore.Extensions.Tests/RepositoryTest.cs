@@ -6,7 +6,6 @@ using Ardalis.Specification;
 using FluentAssertions;
 using Xunit;
 using EfCore.Extensions.Models;
-using Xunit.Abstractions;
 
 namespace EfCore.Extensions.Tests
 {
@@ -14,11 +13,7 @@ namespace EfCore.Extensions.Tests
     {
         private readonly SqliteFixture _fixture;
 
-        public RepositoryTest(SqliteFixture fixture, ITestOutputHelper outputHelper)
-        {
-            _fixture = fixture;
-            _fixture.Output = outputHelper;
-        }
+        public RepositoryTest(SqliteFixture fixture) => _fixture = fixture;
 
         private IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
             => _fixture.CreateRepository<TEntity>();
@@ -32,13 +27,26 @@ namespace EfCore.Extensions.Tests
                 Name = "Hello"
             };
 
-            var added = await repository.AddAsync(item);
+            var _ = await repository.AddAsync(item);
             var changes = await repository.SaveAsync();
             var result = await repository.GetAllAsync();
 
             changes.Should().BeGreaterThan(0);
             result.Count.Should().BeGreaterThan(0);
             result.FirstOrDefault().GetType().Should().Be(typeof(TodoItem));
+        }
+
+        [Fact]
+        public async Task GetAllAsync_AsyncSpecBuilder_ShouldGetResult()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            var result = await repo.GetAllAsync(async e =>
+            {
+                var todo = await repo.FirstOrDefaultAsync(e => e.Include(y => y.UserTodos));
+                e.Where(y => todo.Id == y.Id);
+            });
+
+            result.Count.Should().Be(1);
         }
 
         [Fact]
@@ -60,6 +68,19 @@ namespace EfCore.Extensions.Tests
 
             changes.Should().BeGreaterThan(0);
             result.GetType().Should().Be(typeof(TodoItem));
+        }
+
+        [Fact]
+        public async Task FirstOrDefaultAsync_AsyncSpecBuilder_ShouldGetResult()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            var result = await repo.FirstOrDefaultAsync(async e =>
+            {
+                var todo = await repo.FirstOrDefaultAsync(e => e.Include(y => y.UserTodos));
+                e.Where(y => todo.Id == y.Id);
+            });
+
+            result.Should().NotBeNull();
         }
 
         [Fact]
@@ -141,6 +162,19 @@ namespace EfCore.Extensions.Tests
         }
 
         [Fact]
+        public async Task AnyAsync_AsyncSpecBuilder_ShouldGetResult()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            var result = await repo.AnyAsync(async e =>
+            {
+                var todo = await repo.FirstOrDefaultAsync(e => e.Include(y => y.UserTodos));
+                e.Where(y => todo.Id == y.Id);
+            });
+
+            result.Should().BeTrue();
+        }
+
+        [Fact]
         public async Task Any_HasEntity_ReturnTrue()
         {
             var (repo, item) = await AddTestItemAsync();
@@ -183,23 +217,35 @@ namespace EfCore.Extensions.Tests
             var (repo, items) = await AddTestItemsAsync();
             repo.Remove(items);
             var changes = await repo.SaveAsync();
-            changes.Should().Be(items.Count());
+            changes.Should().BeGreaterOrEqualTo(1);
             var result = await repo.GetAllAsync();
             var removed = items.Select(x => x.Name);
             var resultByFilter = result.Count(x => removed.Contains(x.Name));
             resultByFilter.Should().Be(0);        }
 
-        private static IEnumerable<TodoItem> CreateTestTodoItems()
+        private static IEnumerable<TodoItem> CreateTestTodoItems(User user)
         {
             var item = new TodoItem
             {
-                Name = Guid.NewGuid().ToString()
+                Name = Guid.NewGuid().ToString(),
             };
 
             var item2 = new TodoItem
             {
                 Name = Guid.NewGuid().ToString()
             };
+
+            item.UserTodos.Add(new UserTodo
+            {
+                Todo = item,
+                User = user
+            });
+
+            item2.UserTodos.Add(new UserTodo
+            {
+                Todo = item2,
+                User = user
+            });
 
             return new List<TodoItem>
             {
@@ -209,7 +255,11 @@ namespace EfCore.Extensions.Tests
 
         private async Task<(IRepository<TodoItem>, IEnumerable<TodoItem>)> AddTestItemsAsync()
         {
-            var items = CreateTestTodoItems();
+            var user = new User
+            {
+                Name = "User1"
+            };
+            var items = CreateTestTodoItems(user);
             var repo = CreateRepository<TodoItem>();
             await repo.AddAsync(items);
             var changes = repo.Save();

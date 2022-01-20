@@ -1,16 +1,14 @@
 using System;
 
-namespace EfCore.Extensions
+namespace EfCore.Extensions;
+
+public class ServiceRepositoryRegistry : IRepositoryRegistry
 {
-    public class ServiceRepositoryRegistry : IRepositoryRegistry
-    {
-        private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
-        public ServiceRepositoryRegistry(IServiceProvider serviceProvider) => _serviceProvider =
-            serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+    public ServiceRepositoryRegistry(IServiceProvider serviceProvider) => _serviceProvider =
+        serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
-        public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions repositoryOptions)
-            where TEntity : class
-            => (IRepository<TEntity>)_serviceProvider.GetService(typeof(IRepository<TEntity>));
-    }
+    public IRepository<TEntity> GetRepository<TEntity>(RepositoryOptions repositoryOptions) where TEntity : class
+        => (IRepository<TEntity>)_serviceProvider.GetService(typeof(IRepository<TEntity>));
 }

@@ -4,76 +4,108 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 
-namespace EfCore.Extensions
+namespace EfCore.Extensions;
+
+public static class RepositoryExtensions
 {
-    public static class RepositoryExtensions
+    public static List<TEntity> GetAll<TEntity>(this IRepository<TEntity> repository,
+                                                Action<ISpecificationBuilder<TEntity>> specBuilder)
+        where TEntity : class
     {
-        public static List<TEntity> GetAll<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
 
-            return repository.GetAll(spec);
-        }
+        return repository.GetAll(spec);
+    }
 
-        public static Task<List<TEntity>> GetAllAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+    public static Task<List<TEntity>> GetAllAsync<TEntity>(this IRepository<TEntity> repository,
+                                                           Action<ISpecificationBuilder<TEntity>> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
 
-            return repository.GetAllAsync(spec);
-        }
+        return repository.GetAllAsync(spec);
+    }
 
-        public static Task<TEntity> FirstOrDefaultAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+    public static async ValueTask<List<TEntity>> GetAllAsync<TEntity>(
+        this IRepository<TEntity> repository, Func<ISpecificationBuilder<TEntity>, ValueTask> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        await specBuilder(spec.GetQuery()).ConfigureAwait(false);
 
-            return repository.FirstOrDefaultAsync(spec);
-        }
+        return await repository.GetAllAsync(spec).ConfigureAwait(false);
+    }
 
-        public static TEntity FirstOrDefault<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+    public static Task<TEntity> FirstOrDefaultAsync<TEntity>(this IRepository<TEntity> repository,
+                                                             Action<ISpecificationBuilder<TEntity>> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
 
-            return repository.FirstOrDefault(spec);
-        }
+        return repository.FirstOrDefaultAsync(spec);
+    }
 
-        public static Task<bool> AnyAsync<TEntity>(this IRepository<TEntity> repository, Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+    public static async ValueTask<TEntity> FirstOrDefaultAsync<TEntity>(
+        this IRepository<TEntity> repository, Func<ISpecificationBuilder<TEntity>, ValueTask> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        await specBuilder(spec.GetQuery()).ConfigureAwait(false);
 
-            return repository.AnyAsync(spec);
-        }
+        return await repository.FirstOrDefaultAsync(spec).ConfigureAwait(false);
+    }
 
-        public static bool Any<TEntity>(this IRepository<TEntity> repository,
-                                        Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
-        {
-            var spec = new RelaySpecification<TEntity>();
-            specBuilder(spec.GetQuery());
+    public static TEntity FirstOrDefault<TEntity>(this IRepository<TEntity> repository,
+                                                  Action<ISpecificationBuilder<TEntity>> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
 
-            return repository.Any(spec);
-        }
+        return repository.FirstOrDefault(spec);
+    }
 
+    public static Task<bool> AnyAsync<TEntity>(this IRepository<TEntity> repository,
+                                                     Action<ISpecificationBuilder<TEntity>> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
 
-        public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
-            where TEntity : class
-        {
-            if(repository.IsUpdated(entity))
-            {
-                repository.Update(entity);
-            }
-        }
+        return repository.AnyAsync(spec);
+    }
 
-        public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, params TEntity[] entities)
-            where TEntity : class
-        {
-            foreach(var entity in entities.Where(repository.IsUpdated))
-            {
-                repository.Update(entity);
-            }
-        }
+    public static async ValueTask<bool> AnyAsync<TEntity>(this IRepository<TEntity> repository,
+                                                     Func<ISpecificationBuilder<TEntity>, ValueTask> specBuilder)
+        where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        await specBuilder(spec.GetQuery()).ConfigureAwait(false);
+
+        return await repository.AnyAsync(spec).ConfigureAwait(false);
+    }
+
+    public static bool Any<TEntity>(this IRepository<TEntity> repository,
+                                    Action<ISpecificationBuilder<TEntity>> specBuilder) where TEntity : class
+    {
+        var spec = new RelaySpecification<TEntity>();
+        specBuilder(spec.GetQuery());
+
+        return repository.Any(spec);
+    }
+
+    public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
+        where TEntity : class
+    {
+        if(repository.IsUpdated(entity)) { repository.Update(entity); }
+    }
+
+    public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, params TEntity[] entities)
+        where TEntity : class
+    {
+        foreach(var entity in entities.Where(repository.IsUpdated)) { repository.Update(entity); }
     }
 }

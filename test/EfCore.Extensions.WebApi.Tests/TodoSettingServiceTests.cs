@@ -18,10 +18,9 @@ namespace EfCore.Extensions.WebApi.Tests
     {
         private readonly SqliteFixture _fixture;
 
-        public TodoSettingServiceTests(SqliteFixture fixture, ITestOutputHelper output)
+        public TodoSettingServiceTests(SqliteFixture fixture)
         {
             _fixture = fixture;
-            _fixture.Output = output;
 
             var mappingConfig = new MapperConfiguration(mc =>
             {

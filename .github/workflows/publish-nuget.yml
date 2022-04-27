@@ -26,4 +26,3 @@ jobs:
           PROJECT_FILE_PATH: src/EfCore.Extensions/EfCore.Extensions.csproj
           TAG_FORMAT: '*'
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-

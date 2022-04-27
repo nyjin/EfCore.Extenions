@@ -11,7 +11,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>n3.EfCore.Extensions</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.11.0</Version>
+    <Version>0.12.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

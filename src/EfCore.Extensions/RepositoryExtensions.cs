@@ -97,15 +97,26 @@ public static class RepositoryExtensions
         return repository.Any(spec);
     }
 
-    public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
+    public static bool UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, TEntity entity)
         where TEntity : class
     {
-        if(repository.IsUpdated(entity)) { repository.Update(entity); }
+        if(!repository.IsUpdated(entity)) { return false; }
+
+        repository.Update(entity);
+        return true;
+
     }
 
-    public static void UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, params TEntity[] entities)
+    public static int UpdateIfChanged<TEntity>(this IRepository<TEntity> repository, params TEntity[] entities)
         where TEntity : class
     {
-        foreach(var entity in entities.Where(repository.IsUpdated)) { repository.Update(entity); }
+        var affect = 0;
+        foreach(var entity in entities.Where(repository.IsUpdated))
+        {
+            repository.Update(entity);
+            affect++;
+        }
+
+        return affect;
     }
 }

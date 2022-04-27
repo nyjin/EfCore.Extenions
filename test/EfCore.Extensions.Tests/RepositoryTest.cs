@@ -123,6 +123,36 @@ namespace EfCore.Extensions.Tests
         }
 
         [Fact]
+        public async Task UpdateIfChanged_ChangeProperty_ShouldTrue()
+        {
+            var (repo, item) = await AddTestItemAsync();
+            item.Name = "Hello2";
+            repo.UpdateIfChanged(item).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task UpdateIfChanged_NotChanged_ShouldFalse()
+        {
+            var (repo, item) = await AddTestItemAsync();
+            repo.UpdateIfChanged(item).Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateIfChanged_ItemsPropertyChanged_ShouldTrue()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            items.FirstOrDefault().Name = "Hello2";
+            repo.UpdateIfChanged(items.ToArray()).Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task UpdateIfChanged_ItemsPropertyNotChanged_ShouldFalse()
+        {
+            var (repo, items) = await AddTestItemsAsync();
+            repo.UpdateIfChanged(items.ToArray()).Should().Be(0);
+        }
+
+        [Fact]
         public async Task Remove_Entity_ShouldBe_ChangedAsync()
         {
             var (repo, item) = await AddTestItemAsync(Guid.NewGuid().ToString());
